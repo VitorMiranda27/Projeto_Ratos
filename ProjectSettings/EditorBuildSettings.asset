@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Fase1.unity
     guid: e6893a037c6757c48a540390ffc82fdf
   - enabled: 1
+    path: Assets/Scenes/Fase2.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
     path: Assets/Scenes/FimDeJogo.unity
     guid: 587b3ad8dadf14d4e846090e6753bdd5
   - enabled: 1

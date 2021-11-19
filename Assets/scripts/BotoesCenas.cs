@@ -10,8 +10,17 @@ public class BotoesCenas : MonoBehaviour
     {
         SceneManager.LoadScene("Menu");
     }
-    public void JogarBotao()
+    public void JogarFase1()
     {
         SceneManager.LoadScene("Fase1");
+    }
+
+    public void JogarFase2()
+    {
+        SceneManager.LoadScene("Fase2");
+    }
+    public void Sair()
+    {
+        Application.Quit();
     }
 }
