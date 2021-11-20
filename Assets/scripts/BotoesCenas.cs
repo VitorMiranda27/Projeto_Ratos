@@ -6,18 +6,9 @@ using UnityEngine.UI;
 
 public class BotoesCenas : MonoBehaviour
 {
-    public void MenuButao()
+    public void CarregaCena(string nomeCena)
     {
-        SceneManager.LoadScene("Menu");
-    }
-    public void JogarFase1()
-    {
-        SceneManager.LoadScene("Fase1");
-    }
-
-    public void JogarFase2()
-    {
-        SceneManager.LoadScene("Fase2");
+        SceneManager.LoadScene(nomeCena);
     }
     public void Sair()
     {
