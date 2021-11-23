@@ -9,6 +9,8 @@ TagManager:
   - Veneno
   - Chegada
   - Death
+  - Queijo
+  - Mascara
   layers:
   - Default
   - TransparentFX

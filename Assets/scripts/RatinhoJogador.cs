@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class RatinhoJogador : MonoBehaviour
 {
     private CharacterController controle;
+    public GameObject escudo;
     public float speedFrente;
     public float speedLado;
     public float jumpHeight;
@@ -24,6 +25,18 @@ public class RatinhoJogador : MonoBehaviour
         set
         {
             vida = value;
+        }
+    }
+    public int mask = 0;
+    public int Mask
+    {
+        get
+        {
+            return mask;
+        }
+        set
+        {
+            Mask = value;
         }
     }
     bool cheat1 = false;
@@ -67,7 +80,18 @@ public class RatinhoJogador : MonoBehaviour
         {
             SceneManager.LoadScene("FimDeJogo");
         }
-    } 
+    }
+    void Mascara()
+    {
+        if(Mask > 0)
+        {
+            escudo.SetActive(true);
+        }
+        else
+        {
+            escudo.SetActive(false);
+        }
+    }
     void OnTriggerEnter(Collider outro)
     {
         if (outro.gameObject.CompareTag("Rotation"))
@@ -77,7 +101,11 @@ public class RatinhoJogador : MonoBehaviour
         }
         if (outro.gameObject.CompareTag("Veneno"))
         {
-            if(cheat2 == false)
+            if(Mask == 1)
+            {
+                Mask--;
+            }
+            else if(cheat2 == false)
             {
                 Vida--;
             }
@@ -90,6 +118,22 @@ public class RatinhoJogador : MonoBehaviour
         if (outro.gameObject.CompareTag("Death"))
         {
             Vida-=3;
+            Destroy(outro.gameObject);
+        }
+        if (outro.gameObject.CompareTag("Queijo"))
+        {
+            if (Vida < 3)
+            {
+                Vida++;
+            }
+            Destroy(outro.gameObject);
+        }
+        if (outro.gameObject.CompareTag("Mascara"))
+        {
+            if (Mask < 1)
+            {
+                Mask++;
+            }
             Destroy(outro.gameObject);
         }
     }
