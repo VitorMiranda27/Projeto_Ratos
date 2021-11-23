@@ -26,6 +26,8 @@ public class RatinhoJogador : MonoBehaviour
             vida = value;
         }
     }
+    bool cheat1 = false;
+    bool cheat2 = false;
 
     void Start()
     {
@@ -75,12 +77,45 @@ public class RatinhoJogador : MonoBehaviour
         }
         if (outro.gameObject.CompareTag("Veneno"))
         {
-            Vida--;
+            if(cheat2 == false)
+            {
+                Vida--;
+            }
             Destroy(outro.gameObject);
         }
         if (outro.gameObject.CompareTag("Chegada"))
         {
             SceneManager.LoadScene("ParaBens");
+        }
+        if (outro.gameObject.CompareTag("Death"))
+        {
+            Vida-=3;
+            Destroy(outro.gameObject);
+        }
+    }
+    void CheatCodes()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            if(cheat1 == false)
+            {
+                cheat1 = true;
+            }
+            else
+            {
+                cheat1 = false;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            if (cheat1 == false)
+            {
+                cheat1 = true;
+            }
+            else
+            {
+                cheat1 = false;
+            }
         }
     }
         
