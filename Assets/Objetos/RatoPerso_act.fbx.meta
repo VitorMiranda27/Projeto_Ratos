@@ -2,7 +2,19 @@ fileFormatVersion: 2
 guid: 2a82d826b7db53e4b967e7fdd8c6bd9a
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: -1020994389465332989
+    second: BakeDeath
+  - first:
+      74: -3489894759786703969
+    second: BakeJump
+  - first:
+      74: -6635910747788629339
+    second: BakePunch
+  - first:
+      74: 8077828393346755080
+    second: BakeRun
   externalObjects: {}
   materials:
     materialImportMode: 2
