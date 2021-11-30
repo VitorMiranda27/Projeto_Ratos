@@ -15,6 +15,9 @@ ModelImporter:
   - first:
       74: 8077828393346755080
     second: BakeRun
+  - first:
+      74: -4207610309262666394
+    second: Armature_Char|BakeRun
   externalObjects: {}
   materials:
     materialImportMode: 2
