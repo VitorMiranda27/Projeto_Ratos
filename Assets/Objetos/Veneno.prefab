@@ -186,8 +186,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198707300236646470, guid: d26aaf76e6e2409448242b9a2d66f31f,
         type: 3}
+      propertyPath: useRigidbodyForVelocity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198707300236646470, guid: d26aaf76e6e2409448242b9a2d66f31f,
+        type: 3}
       propertyPath: InitialModule.maxNumParticles
-      value: 200
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 198707300236646470, guid: d26aaf76e6e2409448242b9a2d66f31f,
         type: 3}

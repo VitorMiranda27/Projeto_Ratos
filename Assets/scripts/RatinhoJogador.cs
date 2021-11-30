@@ -15,6 +15,7 @@ public class RatinhoJogador : MonoBehaviour
     public float gravidade;
     public GameObject ratinho;
     RaycastHit hit;
+    float escalatempo;
     public int vida = 3;
     public int Vida
     {
@@ -36,26 +37,33 @@ public class RatinhoJogador : MonoBehaviour
         }
         set
         {
-            Mask = value;
+            mask = value;
         }
     }
     bool cheat1 = false;
     bool cheat2 = false;
+    float pastgrau = 0;
+    float grau2 = 0;
+    float grau1 = 0;
 
     void Start()
     {
         controle = GetComponent<CharacterController>();
+        escalatempo = Time.timeScale;
     }
 
     void Update()
     {
         Movimento();
         Saude();
+        Mascara();
+        CheatCodes();
+        Stop();
     }
     void Movimento()
     {
         Vector3 dir = transform.forward * speedFrente;
-        if (transform.position.y < 0.5f)
+        if (controle.isGrounded)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -97,7 +105,23 @@ public class RatinhoJogador : MonoBehaviour
         if (outro.gameObject.CompareTag("Rotation"))
         {
             float grau = outro.gameObject.GetComponent<Colisor>().rotacao;
+            if(pastgrau != grau)
+            {
+                if(pastgrau < grau)
+                {
+                    grau1 = (grau - pastgrau) * 0.3f;
+                    grau2 = (grau - pastgrau) * 0.6f;
+                }
+                else
+                {
+                    grau1 = (pastgrau - grau) * 0.3f;
+                    grau2 = (pastgrau - grau) * 0.6f;
+                }
+            }
+            transform.rotation = Quaternion.Euler(0, grau1, 0);
+            transform.rotation = Quaternion.Euler(0, grau2, 0);
             transform.rotation = Quaternion.Euler(0, grau, 0);
+            pastgrau = grau;
         }
         if (outro.gameObject.CompareTag("Veneno"))
         {
@@ -152,13 +176,27 @@ public class RatinhoJogador : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.V))
         {
-            if (cheat1 == false)
+            if (cheat2 == false)
             {
-                cheat1 = true;
+                cheat2 = true;
             }
             else
             {
-                cheat1 = false;
+                cheat2 = false;
+            }
+        }
+    }
+    public void Stop()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if(Time.timeScale != 0)
+            {
+                Time.timeScale = 0;
+            }
+            else
+            {
+                Time.timeScale = escalatempo;
             }
         }
     }
