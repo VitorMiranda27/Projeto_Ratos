@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class RatinhoJogador : MonoBehaviour
 {
-    private CharacterController controle;
+    public CharacterController controle;
+    public Animator anim;
     public GameObject escudo;
     public float speedFrente;
     public float speedLado;
@@ -15,17 +16,30 @@ public class RatinhoJogador : MonoBehaviour
     public float gravidade;
     public GameObject ratinho;
     RaycastHit hit;
-    float escalatempo;
+    float escalatempo, tempo;
+    private float posToqueIni, posToqueFin;
     public int vida = 3;
     public int Vida
     {
+
         get
         {
             return vida;
         }
         set
         {
-            vida = value;
+            if (value > 3)
+            {
+                vida = 3;
+            }
+            else if (value < 0)
+            {
+                vida = 0;
+            }
+            else
+            {
+                vida = value;
+            }
         }
     }
     public int mask = 0;
@@ -37,37 +51,85 @@ public class RatinhoJogador : MonoBehaviour
         }
         set
         {
-            mask = value;
+            if (value > 3)
+            {
+                mask = 3;
+            }
+            else if (value < 0)
+            {
+                mask = 0;
+            }
+            else
+            {
+                mask = value;
+            }
         }
     }
-    bool cheat1 = false;
+    public float h = 0;
+    public float H
+    {
+        get
+        {
+            return h;
+        }
+        set
+        {
+            if (value > 1)
+            {
+                h = 1;
+            }
+            else if (value < -1)
+            {
+                h = -1;
+            }
+            else
+            {
+               h = value;
+            }
+        }
+    }
     bool cheat2 = false;
+    bool queda = false;
     float pastgrau = 0;
     float grau2 = 0;
     float grau1 = 0;
+    float telax = 0;
 
     void Start()
     {
-        controle = GetComponent<CharacterController>();
         escalatempo = Time.timeScale;
+        Resolution[] resolutions = Screen.resolutions;
+        foreach (var res in resolutions)
+        {
+            telax = res.height;
+        }
     }
 
     void Update()
     {
-        Movimento();
+#if UNITY_EDITOR
+        Movimento1();
+        CheatCodes1();
+#endif
+#if UNITY_ANDROID
+        Movimento2();
+        CheatCodes2();
+#endif
         Saude();
         Mascara();
-        CheatCodes();
         Stop();
     }
-    void Movimento()
+    void Movimento1()
     {
         Vector3 dir = transform.forward * speedFrente;
         if (controle.isGrounded)
         {
+            anim.SetInteger("transition", 1);
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 jumpVelocity = jumpHeight;
+                anim.SetInteger("transition", 2);
             }
         }
         else
@@ -80,13 +142,66 @@ public class RatinhoJogador : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         Vector3 lado = transform.right * speedLado * h;
         controle.Move(lado * Time.deltaTime);
+        
+    }
+    void Movimento2()
+    {
+        Vector3 dir = transform.forward * speedFrente;
+        if (Input.touchCount > 0)
+        {
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+                posToqueIni = Input.GetTouch(0).position.y;
+            }
+            if (Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                posToqueFin = Input.GetTouch(0).position.y;
+                
+                if (controle.isGrounded)
+                {
+                    anim.SetInteger("transition", 1);
+                    if (posToqueFin - posToqueIni > 200)
+                    {
+                        anim.SetInteger("transition", 2);
+                        jumpVelocity = jumpHeight;
+                    }
+                }
+            }
+        }
+        else
+        {
+            jumpVelocity -= gravidade;
+        }
+        dir.y = jumpVelocity;
+        controle.Move(dir * Time.deltaTime);
+
+        if(Input.GetTouch(0).position.x < telax / 2.0f)
+        {
+            H -= 0.1f;
+        }
+        else if(Input.GetTouch(0).position.x >= telax / 2.0f)
+        {
+            H += 0.1f;
+        }
+
+        Vector3 lado = transform.right * speedLado * H;
+        controle.Move(lado * Time.deltaTime);
 
     }
     void Saude()
     {
         if(Vida <= 0)
         {
-            SceneManager.LoadScene("FimDeJogo");
+            anim.SetInteger("transition", 3);
+            speedFrente = 0;
+            
+            tempo += Time.deltaTime;
+
+            if (tempo > 2) 
+            {
+                SceneManager.LoadScene("FimDeJogo"); 
+            }
+
         }
     }
     void Mascara()
@@ -146,35 +261,32 @@ public class RatinhoJogador : MonoBehaviour
         }
         if (outro.gameObject.CompareTag("Queijo"))
         {
-            if (Vida < 3)
-            {
-                Vida++;
-            }
+            Vida++;
             Destroy(outro.gameObject);
         }
         if (outro.gameObject.CompareTag("Mascara"))
         {
-            if (Mask < 1)
-            {
-                Mask++;
-            }
+            Mask++;
             Destroy(outro.gameObject);
         }
     }
-    void CheatCodes()
+    void CheatCodes1()
     {
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            if(cheat1 == false)
+            if (cheat2 == false)
             {
-                cheat1 = true;
+                cheat2 = true;
             }
             else
             {
-                cheat1 = false;
+                cheat2 = false;
             }
         }
-        if (Input.GetKeyDown(KeyCode.V))
+    }
+    void CheatCodes2()
+    {
+        if (Input.touchCount == 5)
         {
             if (cheat2 == false)
             {

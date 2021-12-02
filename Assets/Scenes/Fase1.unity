@@ -835,7 +835,6 @@ GameObject:
   - component: {fileID: 1247067561}
   - component: {fileID: 1247067563}
   - component: {fileID: 1247067564}
-  - component: {fileID: 1247067562}
   m_Layer: 3
   m_Name: Jogador
   m_TagString: Jogador
@@ -860,22 +859,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1247067562
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1247067560}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 3
 --- !u!143 &1247067563
 CharacterController:
   m_ObjectHideFlags: 0
@@ -887,7 +870,7 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
+  m_Height: 2.7
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
@@ -906,14 +889,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2007413004cf3fd4f8858758976f6a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controle: {fileID: 1247067563}
+  anim: {fileID: 1756059745}
   escudo: {fileID: 216423619}
   speedFrente: 25
   speedLado: 15
-  jumpHeight: 55
-  gravidade: 1.5
+  jumpHeight: 32.7
+  gravidade: 0.9
   ratinho: {fileID: 1247067560}
   vida: 3
   mask: 0
+  h: 0
 --- !u!1 &1374224014
 GameObject:
   m_ObjectHideFlags: 0
@@ -997,6 +983,31 @@ Transform:
   m_Father: {fileID: 1247067561}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
+--- !u!1 &1756059743 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2a82d826b7db53e4b967e7fdd8c6bd9a,
+    type: 3}
+  m_PrefabInstance: {fileID: 146115892}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1756059745
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1756059743}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2d2450ed378a1da418a7a5f0b0b58fcc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1841963706
 GameObject:
   m_ObjectHideFlags: 0
