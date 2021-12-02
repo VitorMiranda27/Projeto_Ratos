@@ -13,6 +13,6 @@ public class Coletavel : MonoBehaviour
 
     void Rodaroda()
     {
-        objeto.transform.Rotate(0, speed, 0);
+        objeto.transform.Rotate(0, 0, speed);
     }
 }
