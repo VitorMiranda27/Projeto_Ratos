@@ -1,23 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MusicControler : MonoBehaviour
 {
-    public GameObject paiValor;
-    ScriptValue valores;
+    GameObject paiValor;
+    public Slider sliderMusica;
+    ScriptValue filhoValor;
+    public AudioSource volmusica;
 
     void Start()
     {
-        if(paiValor == null)
-        {
-            paiValor = GameObject.FindWithTag("Player");
-        }
-        valores = paiValor.GetComponent<ScriptValue>();
+        paiValor = GameObject.FindWithTag("ValorS");
+        filhoValor = paiValor.GetComponent<ScriptValue>();
+        volmusica.volume = filhoValor.VolumeMusica;
     }
-
-    void Update()
+    public void SliderMusica()
     {
-        
+        filhoValor.VolumeMusica = sliderMusica.value;
+        volmusica.volume = sliderMusica.value;
     }
 }

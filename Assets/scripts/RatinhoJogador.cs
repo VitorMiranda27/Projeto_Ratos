@@ -8,15 +8,12 @@ public class RatinhoJogador : MonoBehaviour
 {
     public CharacterController controle;
     public Animator anim;
+    public SFXController sons;
     public GameObject escudo;
-    public float speedFrente;
-    public float speedLado;
-    public float jumpHeight;
-    float jumpVelocity;
-    public float gravidade;
-    public GameObject ratinho;
+    Vector3 lado;
+    public float speedFrente, speedLado, jumpHeight1, jumpHeight2, gravidade;
+    float jumpVelocity, tempo;
     RaycastHit hit;
-    float escalatempo, tempo;
     private float posToqueIni, posToqueFin;
     public int vida = 3;
     public int Vida
@@ -65,7 +62,7 @@ public class RatinhoJogador : MonoBehaviour
             }
         }
     }
-    public float h = 0;
+    float h = 0;
     public float H
     {
         get
@@ -84,40 +81,36 @@ public class RatinhoJogador : MonoBehaviour
             }
             else
             {
-               h = value;
+                h = value;
             }
         }
     }
     bool cheat2 = false;
-    bool queda = false;
     float pastgrau = 0;
     float grau2 = 0;
     float grau1 = 0;
-    float telax = 0;
-
     void Start()
     {
-        escalatempo = Time.timeScale;
-        Resolution[] resolutions = Screen.resolutions;
-        foreach (var res in resolutions)
-        {
-            telax = res.height;
-        }
+        
     }
-
     void Update()
     {
+        
+        if(Time.timeScale == 1)
+        {
 #if UNITY_EDITOR
-        Movimento1();
-        CheatCodes1();
+            Movimento1();
+            CheatCodes1();
+            Saude();
+            Mascara();
 #endif
 #if UNITY_ANDROID
-        Movimento2();
-        CheatCodes2();
+            Movimento2();
+            CheatCodes2();
+            Saude();
+            Mascara();
 #endif
-        Saude();
-        Mascara();
-        Stop();
+        }
     }
     void Movimento1()
     {
@@ -128,7 +121,8 @@ public class RatinhoJogador : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                jumpVelocity = jumpHeight;
+                sons.SoundPulo();
+                jumpVelocity = jumpHeight1;
                 anim.SetInteger("transition", 2);
             }
         }
@@ -142,7 +136,7 @@ public class RatinhoJogador : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         Vector3 lado = transform.right * speedLado * h;
         controle.Move(lado * Time.deltaTime);
-        
+
     }
     void Movimento2()
     {
@@ -156,14 +150,15 @@ public class RatinhoJogador : MonoBehaviour
             if (Input.GetTouch(0).phase == TouchPhase.Ended)
             {
                 posToqueFin = Input.GetTouch(0).position.y;
-                
+
                 if (controle.isGrounded)
                 {
                     anim.SetInteger("transition", 1);
                     if (posToqueFin - posToqueIni > 200)
                     {
                         anim.SetInteger("transition", 2);
-                        jumpVelocity = jumpHeight;
+                        sons.SoundPulo();
+                        jumpVelocity = jumpHeight2;
                     }
                 }
             }
@@ -175,33 +170,46 @@ public class RatinhoJogador : MonoBehaviour
         dir.y = jumpVelocity;
         controle.Move(dir * Time.deltaTime);
 
-        if(Input.GetTouch(0).position.x < telax / 2.0f)
+        if (Input.touchCount > 0)
         {
-            H -= 0.1f;
+            Touch touch = Input.GetTouch(0);
+            if (touch.position.x <= (Screen.width / 2))
+            {
+                H -= 0.1f;
+            }
+            if (touch.position.x > (Screen.width / 2))
+            {
+                H += 0.1f;
+            }
         }
-        else if(Input.GetTouch(0).position.x >= telax / 2.0f)
+        else
         {
-            H += 0.1f;
+            H = 0;
         }
-
-        Vector3 lado = transform.right * speedLado * H;
+        
+        lado = transform.right * speedLado * H;
         controle.Move(lado * Time.deltaTime);
-
     }
     void Saude()
     {
         if(Vida <= 0)
         {
-            anim.SetInteger("transition", 3);
+            speedLado = 0;
+            gravidade = 0;
+            jumpHeight1 = 0;
+            jumpHeight2 = 0;
             speedFrente = 0;
+
+
+            anim.SetInteger("transition", 3);
             
             tempo += Time.deltaTime;
 
-            if (tempo > 2) 
+            if (tempo > 1.0f) 
             {
                 SceneManager.LoadScene("FimDeJogo"); 
             }
-
+            
         }
     }
     void Mascara()
@@ -209,6 +217,7 @@ public class RatinhoJogador : MonoBehaviour
         if(Mask > 0)
         {
             escudo.SetActive(true);
+            sons.SoundEscudoAtivo();
         }
         else
         {
@@ -246,6 +255,7 @@ public class RatinhoJogador : MonoBehaviour
             }
             else if(cheat2 == false)
             {
+                sons.SoundDano();
                 Vida--;
             }
             Destroy(outro.gameObject);
@@ -254,6 +264,10 @@ public class RatinhoJogador : MonoBehaviour
         {
             SceneManager.LoadScene("ParaBens");
         }
+        if (outro.gameObject.CompareTag("Chegada2"))
+        {
+            SceneManager.LoadScene("ParaBens2");
+        }
         if (outro.gameObject.CompareTag("Death"))
         {
             Vida-=3;
@@ -261,6 +275,7 @@ public class RatinhoJogador : MonoBehaviour
         }
         if (outro.gameObject.CompareTag("Queijo"))
         {
+            sons.SoundComendo();
             Vida++;
             Destroy(outro.gameObject);
         }
@@ -300,16 +315,14 @@ public class RatinhoJogador : MonoBehaviour
     }
     public void Stop()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Time.timeScale != 0)
         {
-            if(Time.timeScale != 0)
-            {
-                Time.timeScale = 0;
-            }
-            else
-            {
-                Time.timeScale = escalatempo;
-            }
+            Time.timeScale = 0;
+            
+        }
+        else
+        {
+            Time.timeScale = 1;
         }
     }
         

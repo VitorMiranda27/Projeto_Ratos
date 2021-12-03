@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ParaBens.unity
     guid: 34fef0593d2d71f469857814b933bae0
+  - enabled: 1
+    path: Assets/Scenes/Parabens2.unity
+    guid: 90df215dafe90354ebbd201b3aef0c41
   m_configObjects: {}
